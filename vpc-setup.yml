@@ -23,7 +23,7 @@
         az: "{{zone1}}"
         cidr: "{{PubSub1Cidr}}"
         tags:
-          Name: Public Subenet 1
+          Name: Public SubNet 1
       register: pubsub1_out
     - name: Create Pub SubNet 2 in Zone 2
       amazon.aws.ec2_vpc_subnet:
@@ -33,7 +33,7 @@
         az: "{{zone2}}"
         cidr: "{{PubSub2Cidr}}"
         tags:
-          Name: Public Subenet 2
+          Name: Public Subnet 2
       register: pubsub2_out
     - name: Create Pub SubNet 3 in Zone 3
       amazon.aws.ec2_vpc_subnet:
@@ -43,7 +43,7 @@
         az: "{{zone3}}"
         cidr: "{{PubSub3Cidr}}"
         tags:
-          Name: Public Subenet 3
+          Name: Public Subnet 3
       register: pubsub3_out
     - name: Create Priv SubNet 1 in Zone 1
       amazon.aws.ec2_vpc_subnet:
@@ -53,7 +53,7 @@
         az: "{{zone1}}"
         cidr: "{{PrivSub1Cidr}}"
         tags:
-          Name: Private Subenet 1
+          Name: Private Subnet 1
       register: privsub1_out
     - name: Create Priv SubNet 2 in Zone 2
       amazon.aws.ec2_vpc_subnet:
@@ -63,7 +63,7 @@
         az: "{{zone2}}"
         cidr: "{{PrivSub2Cidr}}"
         tags:
-          Name: Private Subenet 2
+          Name: Private Subnet 2
       register: privsub2_out
     - name: Create Priv SubNet 3 in Zone 3
       amazon.aws.ec2_vpc_subnet:
@@ -73,6 +73,29 @@
         az: "{{zone3}}"
         cidr: "{{PrivSub3Cidr}}"
         tags:
-          Name: Private Subenet 3
+          Name: Private Subnet 3
       register: privsub3_out
-  
+    - name: Create Internet gateway
+      amazon.aws.ec2_vpc_igw:
+        vpc_id: "{{vpcout.vpc.id}}"
+        state: "{{state}}"
+        region: "{{region}}"
+        tags:
+          Name: Prod Internet gateway
+      register: igw_out
+    - name: Set up public subnet route table
+      amazon.aws.ec2_vpc_route_table:
+        vpc_id: "{{vpcout.vpc.id}}"
+        region: "{{region}}"
+        tags:
+          Name: Prod Public RT
+        subnets:
+          - "{{ pubsub1_out.subnet.id }}"
+          - "{{ pubsub2_out.subnet.id }}"
+          - "{{ pubsub3_out.subnet_id }}"
+        routes:
+          - dest: 0.0.0.0/0
+            gateway_id: "{{ igw_out.gateway_id }}"
+          - dest: ::/0
+            gateway_id: "{{ igw_out.gateway_id }}"
+      register: public_route_table
