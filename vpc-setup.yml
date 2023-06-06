@@ -15,5 +15,64 @@
         tenancy: default
         state: "{{state}}"
       register: vpcout
-
+    - name: Create Pub SubNet 1 in Zone 1
+      amazon.aws.ec2_vpc_subnet:
+        state: "{{state}}"
+        vpc_id: "{{vpcout.vpc.id}}"
+        region: "{{region}}"
+        az: "{{zone1}}"
+        cidr: "{{PubSub1Cidr}}"
+        tags:
+          Name: Public Subenet 1
+      register: pubsub1_out
+    - name: Create Pub SubNet 2 in Zone 2
+      amazon.aws.ec2_vpc_subnet:
+        state: "{{state}}"
+        vpc_id: "{{vpcout.vpc.id}}"
+        region: "{{region}}"
+        az: "{{zone2}}"
+        cidr: "{{PubSub2Cidr}}"
+        tags:
+          Name: Public Subenet 2
+      register: pubsub2_out
+    - name: Create Pub SubNet 3 in Zone 3
+      amazon.aws.ec2_vpc_subnet:
+        state: "{{state}}"
+        vpc_id: "{{vpcout.vpc.id}}"
+        region: "{{region}}"
+        az: "{{zone3}}"
+        cidr: "{{PubSub3Cidr}}"
+        tags:
+          Name: Public Subenet 3
+      register: pubsub3_out
+    - name: Create Priv SubNet 1 in Zone 1
+      amazon.aws.ec2_vpc_subnet:
+        state: "{{state}}"
+        vpc_id: "{{vpcout.vpc.id}}"
+        region: "{{region}}"
+        az: "{{zone1}}"
+        cidr: "{{PrivSub1Cidr}}"
+        tags:
+          Name: Private Subenet 1
+      register: privsub1_out
+    - name: Create Priv SubNet 2 in Zone 2
+      amazon.aws.ec2_vpc_subnet:
+        state: "{{state}}"
+        vpc_id: "{{vpcout.vpc.id}}"
+        region: "{{region}}"
+        az: "{{zone2}}"
+        cidr: "{{PrivSub2Cidr}}"
+        tags:
+          Name: Private Subenet 2
+      register: privsub2_out
+    - name: Create Priv SubNet 3 in Zone 3
+      amazon.aws.ec2_vpc_subnet:
+        state: "{{state}}"
+        vpc_id: "{{vpcout.vpc.id}}"
+        region: "{{region}}"
+        az: "{{zone3}}"
+        cidr: "{{PrivSub3Cidr}}"
+        tags:
+          Name: Private Subenet 3
+      register: privsub3_out
   
