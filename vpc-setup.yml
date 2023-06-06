@@ -76,7 +76,7 @@
           Name: Private Subnet 3
       register: privsub3_out
     - name: Create Internet gateway
-      amazon.aws.ec2_vpc_igw:
+      ec2_vpc_igw:
         vpc_id: "{{vpcout.vpc.id}}"
         state: "{{state}}"
         region: "{{region}}"
