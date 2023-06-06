@@ -82,7 +82,7 @@
         region: "{{region}}"
         tags:
           Name: Prod Internet gateway
-#      register: igw
+
     - name: Set up public subnet route table
       ec2_vpc_route_table:
         vpc_id: "{{vpcout.vpc.id}}"
