@@ -1,0 +1,19 @@
+- hosts: localhost
+  connection: local
+  gather_facts: False
+  tasks:
+    - name: Import Vpc Varibale
+      include_vars: vars/vpc_setup
+
+    - name: Create Prod VPC 
+        amazon.aws.ec2_vpc_net:
+          name: "{{vpc_name}}"
+          cidr_block: "{{VpcCidr}}"
+          region: "{{region}}"
+          dns_support: true
+          dns_hostnames: true
+          tenancy: default
+          state: "{{state}}"
+        register: vpcout
+
+  
